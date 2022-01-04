@@ -37,10 +37,12 @@ const rejectionReducer = (state = [], {type, payload}={}) => {
       return [...state, payload]
 
     case updateQuestion.type:
-      const questionIndex = state.findIndex((question) => question.id === payload.id);
-      const newState = [...state];
-      newState[questionIndex].status = payload.status
-      return newState
+      return state.map((question) => {
+        if (question.id === payload.id) {
+          question.status = payload.status
+        }
+        return question
+      })
       
     default:
       return state
