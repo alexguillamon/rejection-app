@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "riteway -r @babel/register src/test/**/*-test.js | tap-nirvana",
+    "test": "riteway -r @babel/register src/**/*-test.js | tap-nirvana",
     "watch": "watch 'clear && npm run test' src/"
   },
   "dependencies": {
