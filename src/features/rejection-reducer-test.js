@@ -1,11 +1,11 @@
 import { describe } from "riteway";
-import { addQuestion, getTotalScore, rejectionReducer, updateQuestion } from "./rejection-reducer";
+import { addQuestion, getTotalScore, questions, updateQuestion } from "./rejection-reducer";
 
-describe('rejectionReducer', async assert =>{
+describe('questions Reducer', async assert =>{
   assert({
     given: 'nothing',
     should: 'return correct initial state',
-    actual: rejectionReducer(),
+    actual: questions(),
     expected: []
   })
 
@@ -21,13 +21,13 @@ describe('rejectionReducer', async assert =>{
     assert({
     given: 'a question object',
     should: 'returns the updated state with the new question in it',
-    actual: rejectionReducer(rejectionReducer(), addQuestion(question)),
+    actual: questions(questions(), addQuestion(question)),
     expected:[question],
     })
   }
 
   {
-    const questions = [
+    const questionActions = [
       addQuestion({
         id: '1',
         timestamp: 1,
@@ -44,7 +44,7 @@ describe('rejectionReducer', async assert =>{
       })
     ]
   
-    const state = questions.reduce(rejectionReducer,[]);
+    const state = questionActions.reduce(questions,[]);
 
     const updatePayload = {
       id: '2',
@@ -54,14 +54,14 @@ describe('rejectionReducer', async assert =>{
     assert({
       given: 'update to a question',
       should: 'return a state with the updated question',
-      actual: rejectionReducer(state, updateQuestion(updatePayload)),
+      actual: questions(state, updateQuestion(updatePayload)),
       expected: [state[0], {...state[1], status: 'accepted'}]
     })
   }
 })
 
 describe('rejection/getTotalScore', async assert => {
-  const questions = [
+  const questionActions = [
     addQuestion({
       id: '1',
       timestamp: 1,
@@ -85,7 +85,7 @@ describe('rejection/getTotalScore', async assert => {
     })
   ]
 
-  const state = questions.reduce(rejectionReducer,[])
+  const state = questionActions.reduce(questions,[])
   
   assert({
     given: 'the a state with questions objects in it',
@@ -97,7 +97,7 @@ describe('rejection/getTotalScore', async assert => {
   assert({
     given: 'the a state without questions',
     should: 'return 0',
-    actual: getTotalScore(rejectionReducer()),
+    actual: getTotalScore(questions()),
     expected: 0,
   })
 })

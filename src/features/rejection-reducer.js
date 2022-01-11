@@ -31,7 +31,7 @@ const updateQuestion = ({
 updateQuestion.type = 'rejection/update'
 
 
-const rejectionReducer = (state = [], {type, payload}={}) => {
+const questions = (state = [], {type, payload}={}) => {
   switch (type) {
     case addQuestion.type:     
       return [...state, payload]
@@ -56,4 +56,4 @@ const scoreReducerHelper = (score, {status}) =>
 
 const getTotalScore = (state) => state.reduce(scoreReducerHelper, 0);
 
-export {rejectionReducer, addQuestion, getTotalScore, updateQuestion};
+export {questions, addQuestion, getTotalScore, updateQuestion};
