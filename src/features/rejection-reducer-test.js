@@ -1,12 +1,16 @@
 import { describe } from "riteway";
-import { addQuestion, getTotalScore, questions, updateQuestion } from "./rejection-reducer";
+import { slice, addQuestion, getTotalScore, questionsReducer, updateQuestion } from "./rejection-reducer";
+
+
+const createState = ({questions = []} = {}) => [...questions];
+const withSlice = (state) => ({[slice]: state});
 
 describe('questions Reducer', async assert =>{
   assert({
     given: 'nothing',
     should: 'return correct initial state',
-    actual: questions(),
-    expected: []
+    actual: questionsReducer(),
+    expected: createState()
   })
 
   {
@@ -21,8 +25,8 @@ describe('questions Reducer', async assert =>{
     assert({
     given: 'a question object',
     should: 'returns the updated state with the new question in it',
-    actual: questions(questions(), addQuestion(question)),
-    expected:[question],
+    actual: questionsReducer(questionsReducer(), addQuestion(question)),
+    expected: createState({questions: [question]}),
     })
   }
 
@@ -44,7 +48,9 @@ describe('questions Reducer', async assert =>{
       })
     ]
   
-    const state = questionActions.reduce(questions,[]);
+    const initialState = questionActions.reduce(questionsReducer,[]);
+
+    const expectedState = [initialState[0], {...initialState[1], status: 'accepted'}]
 
     const updatePayload = {
       id: '2',
@@ -54,8 +60,8 @@ describe('questions Reducer', async assert =>{
     assert({
       given: 'update to a question',
       should: 'return a state with the updated question',
-      actual: questions(state, updateQuestion(updatePayload)),
-      expected: [state[0], {...state[1], status: 'accepted'}]
+      actual: questionsReducer(initialState, updateQuestion(updatePayload)),
+      expected: expectedState
     })
   }
 })
@@ -82,22 +88,29 @@ describe('rejection/getTotalScore', async assert => {
       question: "Invest in my company",
       askee: 'Investor',
       status: 'rejected'
+    }),
+    addQuestion({
+      id: '4',
+      timestamp: 4,
+      question: "Invest in my company 2",
+      askee: 'Investor2',
+      status: 'pending'
     })
   ]
 
-  const state = questionActions.reduce(questions,[])
+  const slice = withSlice(questionActions.reduce(questionsReducer,[]));
   
   assert({
     given: 'the a state with questions objects in it',
     should: 'return the total score',
-    actual: getTotalScore(state),
+    actual: getTotalScore(slice),
     expected: 21,
   })
 
   assert({
     given: 'the a state without questions',
     should: 'return 0',
-    actual: getTotalScore(questions()),
+    actual: getTotalScore(withSlice(questionsReducer())),
     expected: 0,
   })
 })

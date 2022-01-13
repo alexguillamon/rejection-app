@@ -1,4 +1,7 @@
 import cuid from "cuid";
+import produce from "immer";
+
+const slice = 'questionsReducer';
 
 const addQuestion = ({
   id = cuid(),
@@ -31,17 +34,18 @@ const updateQuestion = ({
 updateQuestion.type = 'rejection/update'
 
 
-const questions = (state = [], {type, payload}={}) => {
+const questionsReducer = (state = [], {type, payload}={}) => {
   switch (type) {
     case addQuestion.type:     
       return [...state, payload]
 
     case updateQuestion.type:
-      return state.map((question) => {
-        if (question.id === payload.id) {
-          question.status = payload.status
-        }
-        return question
+      // BUG: You mutated the original state. FIXED
+      // Tip: Try immer if you want to do direct
+      // assignment like this. It's cool.
+      return produce(state, draft => {
+        const index = draft.findIndex(q => q.id === payload.id);
+        draft[index].status = payload.status
       })
       
     default:
@@ -52,8 +56,13 @@ const questions = (state = [], {type, payload}={}) => {
 const scoreReducerHelper = (score, {status}) => 
   status === 'rejected' ? score + 10 :
   status === 'accepted' ? score + 1 :
+  status === 'pending' ? score :
   score
 
-const getTotalScore = (state) => state.reduce(scoreReducerHelper, 0);
+const getTotalScore = (state) => state[slice].reduce(scoreReducerHelper, 0);
 
-export {questions, addQuestion, getTotalScore, updateQuestion};
+const selectQuestions = (state) => state[slice];
+
+const selectQuestionById = (state, id) => selectQuestions(state).find(q => q.id === id);
+
+export {slice, questionsReducer, addQuestion, updateQuestion, selectQuestions, selectQuestionById, getTotalScore };
