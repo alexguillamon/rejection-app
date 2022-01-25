@@ -6,7 +6,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "test": "riteway -r @babel/register src/**/*-test.js | tap-nirvana",
+    "test": "clear && NODE_ENV=test riteway -r @babel/register -r @babel/polyfill src/**/**/*-test.js | tap-nirvana",
     "watch": "watch 'clear && npm run test' src/"
   },
   "dependencies": {
@@ -16,11 +16,13 @@
     "next": "12.0.7",
     "react": "17.0.2",
     "react-dom": "17.0.2",
-    "react-redux": "^7.2.6"
+    "react-redux": "^7.2.6",
+    "redux-devtools-extension": "^2.13.9"
   },
   "devDependencies": {
     "@babel/core": "^7.16.7",
     "@babel/plugin-transform-runtime": "^7.16.7",
+    "@babel/polyfill": "^7.12.1",
     "@babel/preset-env": "^7.16.7",
     "@babel/preset-react": "^7.16.7",
     "@babel/register": "^7.16.7",
