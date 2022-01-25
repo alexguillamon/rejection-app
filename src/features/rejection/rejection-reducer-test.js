@@ -5,7 +5,7 @@ import { slice, addQuestion, getTotalScore, questionsReducer, updateQuestion } f
 const createState = ({questions = []} = {}) => [...questions];
 const withSlice = (state) => ({[slice]: state});
 
-describe('questions Reducer', async assert =>{
+describe('rejection/questionsReducer', async assert =>{
   assert({
     given: 'nothing',
     should: 'return correct initial state',
