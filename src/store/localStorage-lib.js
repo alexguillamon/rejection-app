@@ -1,8 +1,8 @@
 export const loadLocalStore = () => {
   try {
     const localStoreState = localStorage.getItem('state');
-    if (localStorage === null) return undefined;
-    return JSON.parse(localStorage)
+    if (localStoreState === null) return undefined;
+    return JSON.parse(localStoreState)
   } catch {
     return undefined
   }
