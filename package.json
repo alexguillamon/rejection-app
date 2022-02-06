@@ -7,7 +7,7 @@
     "start": "next start",
     "lint": "next lint",
     "test": "clear && NODE_ENV=test riteway -r @babel/register -r @babel/polyfill src/**/**/*-test.js | tap-nirvana",
-    "watch": "watch 'clear && npm run test' src/"
+    "watch": "watch 'npm run test' src/"
   },
   "dependencies": {
     "cuid": "^2.1.8",
