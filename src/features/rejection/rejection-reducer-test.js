@@ -1,5 +1,5 @@
 import { describe } from "riteway";
-import { slice, addQuestion, getTotalScore, questionsReducer, updateQuestion } from "./rejection-reducer";
+import { slice, addQuestion, addQuestions, getTotalScore, questionsReducer, updateQuestion } from "./rejection-reducer";
 
 
 const createState = ({questions = []} = {}) => [...questions];
@@ -64,6 +64,35 @@ describe('rejection/questionsReducer', async assert =>{
       expected: expectedState
     })
   }
+
+  {
+    const questionActions = [
+      addQuestion({
+        id: '1',
+        timestamp: 1,
+        question: "Can I get a raise?",
+        askee: 'Boss',
+        status: 'accepted'
+      }),
+      addQuestion({
+        id: '2',
+        timestamp: 2,
+        question: "Do you want to marry me?",
+        askee: 'Girlfriend',
+        status: 'pending'
+      })
+    ]
+  
+    const questionList = questionActions.reduce(questionsReducer,[]);
+
+    assert({
+      given: 'a list of questions',
+      should: 'return a state with the questions in it',
+      actual: questionsReducer(undefined, addQuestions(questionList)),
+      expected: createState({questions: questionList})
+    })
+  }
+
 })
 
 describe('rejection/getTotalScore', async assert => {
